@@ -1,1 +1,23 @@
 1- Criar repositorio en la página de github (link ssh): git@github.com:rodrigomoraazocar/productospring.git
+
+2- Ejecuta los siguientes comandos para inicializar un repositorio local en tu proyecto (carpeta raiz):
+
+git init  # Inicializa un repositorio Git local
+git add .  # Agrega todos los archivos al área de preparación
+git commit -m "Primer commit"  # Confirma los cambios iniciales
+
+
+2- git remote add origin git@github.com:rodrigomoraazocar/productospring.git
+
+3- git pull origin main #Obtener actualizaciones de mi repositorio remoto de github
+
+4 - git status # verificar si hay algo para commitar
+
+5 - si al realizar el git status hay algo para commitar realizar el siguiente comando:
+
+git add .  # Agregar cambios
+git commit -m "Actualizar en base a las últimas actualizaciones"  # Confirmar cambios
+
+6- git push -u origin main
+
+
