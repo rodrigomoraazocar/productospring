@@ -20,6 +20,9 @@ import com.example.springboot.dtos.ProductRecordDto;
 import com.example.springboot.models.ProductModel;
 import com.example.springboot.repositories.ProductRepository;
 
+//Hateoas - HiperMedia
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import jakarta.validation.Valid;
 
 @RestController // usado quando realizar uma API REST
@@ -42,10 +45,17 @@ public class ProductController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(productRepository.save(productModel));
 	}
 
-	// Status 200 -
+	// Status 200 - Hateoas - Hipermedias
 	@GetMapping("/products")
 	public ResponseEntity<List<ProductModel>> getAllProducts() {
-		return ResponseEntity.status(HttpStatus.OK).body(productRepository.findAll());
+		List<ProductModel> productsList = productRepository.findAll();
+		if (!productsList.isEmpty()) {
+			for (ProductModel product : productsList) {
+				UUID id = product.getIdProduct();
+				product.add(linkTo(methodOn(ProductController.class).getOneProduct(id)).withSelfRel());
+			}
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(productsList);
 	}
 
 	// Listar por solamente 1 producto con Id
@@ -57,6 +67,7 @@ public class ProductController {
 			// Si está vacio
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product Not found");
 		}
+		productO.get().add(linkTo(methodOn(ProductController.class).getAllProducts()).withRel("Products Lists"));
 		return ResponseEntity.status(HttpStatus.OK).body(productO.get());
 	}
 
@@ -91,5 +102,7 @@ public class ProductController {
 		return ResponseEntity.status(HttpStatus.OK).body("Product deleted sucessfully");
 
 	}
+
+
 
 }
